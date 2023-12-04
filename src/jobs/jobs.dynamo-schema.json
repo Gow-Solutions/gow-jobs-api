@@ -1,0 +1,17 @@
+{
+  "jobId": {
+    "S": "id"
+  },
+  "title": {
+    "S": "title"
+  },
+  "applicants": {
+    "N": "2"
+  },
+  "views": {
+    "N": "3"
+  },
+  "description": {
+    "S": "desc..."
+  }
+}
