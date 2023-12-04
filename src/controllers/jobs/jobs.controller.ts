@@ -13,18 +13,11 @@ export class JobsController {
   constructor(private readonly jobsService: JobsService) {}
 
   @Put(':jobId')
-  async insertOrUpdateJob(@Param('jobId') jobId: string, @Body() jobBody: Job) {
+  async insertOrUpdateJob(@Param('jobId') jobId: number, @Body() jobBody: Job) {
     if (jobId != jobBody.id) {
-      throw new BadRequestException(
-        jobBody,
-        'Param Job ID diferente do Body Job ID.',
-      );
+      throw new BadRequestException('Param Job ID diferente do Body Job ID.');
     }
 
-    console.log('controller');
-
-    const result = await this.jobsService.createOrUpdate(jobBody);
-
-    return result;
+    await this.jobsService.createOrUpdate(jobBody);
   }
 }

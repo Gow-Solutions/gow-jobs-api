@@ -2,8 +2,8 @@ import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Job {
-  @PrimaryColumn()
-  id: string;
+  @PrimaryColumn('int8')
+  id: number;
 
   @Column()
   title: string;

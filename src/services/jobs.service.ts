@@ -11,12 +11,10 @@ export class JobsService {
   ) {}
 
   async createOrUpdate(job: DeepPartial<Job>) {
-    console.log('service', job);
-
-    const saved = await this.repository.save(job);
-
-    console.log('saved', saved);
-
+    const saved = await this.repository.upsert(job, {
+      conflictPaths: ['id'],
+      skipUpdateIfNoValuesChanged: true,
+    });
     return saved;
   }
 }
