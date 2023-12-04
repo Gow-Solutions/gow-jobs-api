@@ -5,8 +5,8 @@ import {
   Param,
   Put,
 } from '@nestjs/common';
-import { Job } from './jobs.model';
-import { JobsService } from './jobs.service';
+import { Job } from '../../entities/jobs.entity';
+import { JobsService } from '../../services/jobs.service';
 
 @Controller('jobs')
 export class JobsController {
@@ -14,12 +14,14 @@ export class JobsController {
 
   @Put(':jobId')
   async insertOrUpdateJob(@Param('jobId') jobId: string, @Body() jobBody: Job) {
-    if (jobId != jobBody.jobId) {
+    if (jobId != jobBody.id) {
       throw new BadRequestException(
         jobBody,
         'Param Job ID diferente do Body Job ID.',
       );
     }
+
+    console.log('controller');
 
     const result = await this.jobsService.createOrUpdate(jobBody);
 
