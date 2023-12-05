@@ -15,7 +15,7 @@ import {
 } from 'src/entities/applicants.entity';
 import { ApplicantsService } from 'src/services/applicant.service';
 import { JobsService } from 'src/services/jobs.service';
-import { EntityNotFoundError } from 'typeorm';
+import { DeepPartial, EntityNotFoundError } from 'typeorm';
 
 type ApplicantInfoDto = {
   title: string;
@@ -77,10 +77,12 @@ export class ApplicantsController {
     }
   }
 
-  private async applicantBuilder(dto: ApplicantDto): Promise<Applicant> {
+  private async applicantBuilder(
+    dto: ApplicantDto,
+  ): Promise<DeepPartial<Applicant>> {
     const job = await this.jobService.get(dto.jobId);
 
-    const applicant: Applicant = {
+    const applicant: DeepPartial<Applicant> = {
       applId: dto.applId,
       email: dto.email,
       img: dto.img,
@@ -101,9 +103,9 @@ export class ApplicantsController {
         img,
         title,
         profId: 0,
-        applId: applicant.applId,
+        applId: applicant.applId || 0,
       };
-      applicant.professionalExperiences.push(profExp);
+      applicant.professionalExperiences?.push(profExp);
     };
 
     const academicMapper = ([img, institution, course, period]: string[]) => {
@@ -113,9 +115,9 @@ export class ApplicantsController {
         img,
         course,
         acadId: 0,
-        applId: applicant.applId,
+        applId: applicant.applId || 0,
       };
-      applicant.academicExperiences.push(acadExp);
+      applicant.academicExperiences?.push(acadExp);
     };
 
     dto.infos

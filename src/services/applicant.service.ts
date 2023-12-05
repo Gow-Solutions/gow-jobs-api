@@ -25,6 +25,8 @@ export class ApplicantsService {
       skipUpdateIfNoValuesChanged: true,
     });
 
+    // const saved = await this.repository.save(applicant);
+
     await this.saveAcademicExperience(applicant);
     await this.saveProfessionalExperience(applicant);
 
