@@ -65,7 +65,7 @@ export class ApplicantsController {
 
       const saved = await this.applicantsService.createOrUpdate(applicant);
 
-      this.logger.log('Operação realizada com sucesso', [applicant, saved]);
+      this.logger.log('Operação realizada com sucesso', [saved]);
     } catch (error) {
       if (error instanceof EntityNotFoundError) {
         throw new NotFoundException('Job não existe na base de dados.');
@@ -101,7 +101,7 @@ export class ApplicantsController {
         img,
         title,
         profId: 0,
-        applId: 0,
+        applId: applicant.applId,
       };
       applicant.professionalExperiences.push(profExp);
     };
@@ -113,7 +113,7 @@ export class ApplicantsController {
         img,
         course,
         acadId: 0,
-        applId: 0,
+        applId: applicant.applId,
       };
       applicant.academicExperiences.push(acadExp);
     };

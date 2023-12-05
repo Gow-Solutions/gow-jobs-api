@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { DeepPartial, Repository } from 'typeorm';
 import {
   AcademicExperience,
@@ -10,6 +10,7 @@ import {
 @Injectable()
 export class ApplicantsService {
   constructor(
+    private readonly logger: Logger,
     @InjectRepository(Applicant)
     private readonly repository: Repository<Applicant>,
     @InjectRepository(AcademicExperience)
@@ -24,37 +25,46 @@ export class ApplicantsService {
       skipUpdateIfNoValuesChanged: true,
     });
 
-    if (
-      applicant.academicExperiences &&
-      applicant.academicExperiences.length > 0
-    ) {
-      applicant.academicExperiences.forEach(
-        (a) => (a.applId = +saved.identifiers[0].applId),
-      );
-
-      await this.academicExpRepository.delete({ applId: applicant.applId });
-      await this.academicExpRepository.save(applicant.academicExperiences);
-    }
-
-    if (
-      applicant.professionalExperiences &&
-      applicant.professionalExperiences.length > 0
-    ) {
-      applicant.professionalExperiences.forEach(
-        (a) => (a.applId = +saved.identifiers[0].applId),
-      );
-
-      await this.professionalExpRepository.delete({ applId: applicant.applId });
-      await this.professionalExpRepository.save(
-        applicant.professionalExperiences,
-      );
-    }
+    await this.saveAcademicExperience(applicant);
+    await this.saveProfessionalExperience(applicant);
 
     return saved;
   }
 
-  // async get(jobId: number): Promise<Job> {
-  //   const job = await this.repository.findOneByOrFail({ jobId: jobId });
-  //   return job;
-  // }
+  private async saveProfessionalExperience(applicant: DeepPartial<Applicant>) {
+    if (
+      applicant.professionalExperiences &&
+      applicant.professionalExperiences.length > 0
+    ) {
+      await this.professionalExpRepository.delete({ applId: applicant.applId });
+
+      for (const exp of applicant.professionalExperiences) {
+        try {
+          await this.professionalExpRepository.save(exp);
+        } catch (err) {
+          this.logger.error('Falha ao salvar experiência profissional.', [
+            exp,
+            err,
+          ]);
+        }
+      }
+    }
+  }
+
+  private async saveAcademicExperience(applicant: DeepPartial<Applicant>) {
+    if (
+      applicant.academicExperiences &&
+      applicant.academicExperiences.length > 0
+    ) {
+      await this.academicExpRepository.delete({ applId: applicant.applId });
+
+      for (const exp of applicant.academicExperiences) {
+        try {
+          await this.academicExpRepository.save(exp);
+        } catch (err) {
+          this.logger.error('Falha ao salvar formação acadêmica. ', [exp, err]);
+        }
+      }
+    }
+  }
 }
