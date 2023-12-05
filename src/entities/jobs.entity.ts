@@ -1,19 +1,23 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Applicant } from './applicants.entity';
 
 @Entity()
 export class Job {
-  @PrimaryColumn('int8')
-  id: number;
+  @PrimaryColumn({ name: 'job_id', type: 'int8' })
+  jobId: number;
 
   @Column()
   title: string;
 
   @Column()
-  applicants: number;
+  appl_count: number;
 
   @Column()
   views: number;
 
   @Column()
   description: string;
+
+  @OneToMany(() => Applicant, (a) => a.job)
+  applicants: Applicant[];
 }
