@@ -147,10 +147,10 @@ export class Applicant {
   @JoinColumn({ name: 'job_id' })
   job: Job;
 
-  @OneToMany(() => ProfessionalExperience, (p) => p.applicant)
+  @OneToMany(() => ProfessionalExperience, (p) => p.applId)
   professionalExperiences: ProfessionalExperience[];
 
-  @OneToMany(() => AcademicExperience, (a) => a.applicant)
+  @OneToMany(() => AcademicExperience, (a) => a.applId)
   academicExperiences: AcademicExperience[];
 }
 
@@ -173,7 +173,11 @@ export class ProfessionalExperience {
 
   @ManyToOne(() => Applicant, (applicant) => applicant.professionalExperiences)
   @JoinColumn({ name: 'appl_id' })
-  applicant: Applicant;
+  applId: number;
+
+  //   @ManyToOne(() => Applicant, (applicant) => applicant.professionalExperiences)
+  //   @JoinColumn({ name: 'appl_id' })
+  //   applicant: Applicant;
 }
 
 @Entity()
@@ -185,15 +189,18 @@ export class AcademicExperience {
   img: string;
 
   @Column()
-  title: string;
+  institution: string;
 
   @Column()
-  company: string;
+  course: string;
 
   @Column()
   period: string;
 
-  @ManyToOne(() => Applicant, (applicant) => applicant.academicExperiences)
   @JoinColumn({ name: 'appl_id' })
-  applicant: Applicant;
+  @ManyToOne(() => Applicant, (applicant) => applicant.academicExperiences)
+  applId: number;
+  //   @ManyToOne(() => Applicant, (applicant) => applicant.academicExperiences)
+  //   @JoinColumn({ name: 'appl_id' })
+  //   applicant: Applicant;
 }

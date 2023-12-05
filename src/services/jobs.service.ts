@@ -12,9 +12,14 @@ export class JobsService {
 
   async createOrUpdate(job: DeepPartial<Job>) {
     const saved = await this.repository.upsert(job, {
-      conflictPaths: ['id'],
+      conflictPaths: ['jobId'],
       skipUpdateIfNoValuesChanged: true,
     });
     return saved;
+  }
+
+  async get(jobId: number): Promise<Job> {
+    const job = await this.repository.findOneByOrFail({ jobId: jobId });
+    return job;
   }
 }

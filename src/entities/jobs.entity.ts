@@ -9,8 +9,8 @@ export class Job {
   @Column()
   title: string;
 
-  @Column()
-  appl_count: number;
+  @Column({ name: 'appl_count' })
+  applCount: number;
 
   @Column()
   views: number;

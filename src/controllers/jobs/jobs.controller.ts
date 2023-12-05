@@ -15,7 +15,7 @@ export class JobsController {
   @Put(':jobId')
   async insertOrUpdateJob(@Param('jobId') jobId: number, @Body() jobBody: Job) {
     if (jobId != jobBody.jobId) {
-      throw new BadRequestException('Param Job ID diferente do Body Job ID.');
+      throw new BadRequestException('Job Id diferente do passado na URL.');
     }
 
     await this.jobsService.createOrUpdate(jobBody);
