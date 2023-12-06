@@ -27,6 +27,7 @@ type ApplicantDto = {
   linkedin: string;
   phone: string;
   resume: string;
+  url: string;
   infos: ApplicantInfoDto[];
   jobId: number;
   applId: number;
@@ -91,6 +92,7 @@ export class ApplicantsController {
       name: dto.name,
       phone: dto.phone,
       title: dto.title,
+      url: dto.url,
       job: job,
       academicExperiences: [],
       professionalExperiences: [],

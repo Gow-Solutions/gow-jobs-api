@@ -25,6 +25,9 @@ export class Job {
   @Column()
   description: string;
 
+  @Column()
+  url: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

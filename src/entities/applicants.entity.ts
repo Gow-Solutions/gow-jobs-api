@@ -37,6 +37,9 @@ export class Applicant {
   @Column()
   phone: string;
 
+  @Column()
+  url: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
